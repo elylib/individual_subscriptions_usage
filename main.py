@@ -210,7 +210,8 @@ if __name__ == '__main__':
                   'North American Society for Sport History', 'Penton Aviation Week Intelligence Network',
                   'Sagamore Publishing LLS', 'Scriptorium Press, Inc.', 'The American Institute for Social Justice',
                   'The Instrumentalist Publishing Company', 'The Society for History Education, Inc.',
-                  'Times Supplement LTD', 'ACTE Publications', 'Against the Grain', 'National Council of Teachers of English (NCTE)'}
+                  'Times Supplement LTD', 'ACTE Publications', 'Against the Grain', 'National Council of Teachers of English (NCTE)',
+                  'American Correctional Association', 'American Geosciences Institute',}
 
     special_cases = {'Edizioni Minerva Medica', 'Chronicle of Higher Education', 'Philosophy Documentation Center'}
 
