@@ -103,16 +103,26 @@ def get_usage_stats_from_wtcox_journals(journals_from_wtcox: Dict[ISSN, Title],
     :return: A dict indexed as above
     """
     usage_reports = defaultdict(lambda: defaultdict(int))
-    for fn in glob.glob(path_to_usage_reports):
+    for fn in glob.iglob(path_to_usage_reports):
         try:
             report = pycounter.report.parse(fn)
         except (pycounter.exceptions.UnknownReportTypeError, ValueError):
             print(fn)
             raise
-        for journal in report:
-            if getattr(journal, 'issn', '') in journals_from_wtcox:
-                for x in journal:
-                    usage_reports[journals_from_wtcox[journal.issn]][x[0]] += x[2]
+        if report.report_type == 'JR1':
+            for journal in report:
+                if getattr(journal, 'issn', '') in journals_from_wtcox:
+                    for x in journal:
+                        usage_reports[journals_from_wtcox[journal.issn]][x[0]] += x[2]
+        elif report.report_type == 'TR_J1':
+            if getattr(journal, 'metric', '') == 'Total_Item_Requests':
+                for journal in report:
+                    if getattr(journal, 'issn', '') in journals_from_wtcox:
+                        for x in journal:
+                            usage_reports[journals_from_wtcox[journal.issn]][x[0]] += x[2]
+        else:
+            print('unknown or unacceptible report type',fn)
+            raise
     return usage_reports
 
 
@@ -215,8 +225,9 @@ if __name__ == '__main__':
 
     special_cases = {'Edizioni Minerva Medica', 'Chronicle of Higher Education', 'Philosophy Documentation Center'}
 
-    dates = [datetime.date(year, month, 1) for month in range(1, 13) for year in range(2015, 2017)]
-    dates.extend(datetime.date(2017, month, 1) for month in range(1, 10))
+    dates = [datetime.date(year, month, 1) for month in range(1, 13) for year in range(2018, 2020)]
+    dates.extend(datetime.date(2017, month, 1) for month in range(10, 13))
+    dates.extend(datetime.date(2020, month, 1) for month in range(1, 7))
 
     wtcox_journals, journals_with_no_issn, ignored = get_journals_and_no_issns_from_wtcox(
         os.path.join('data', 'wtcox_no_header_fulfilled.txt'),
