@@ -11,7 +11,7 @@ import os.path
 from typing import Iterable, List, Dict, Set, AnyStr, NewType, Union, Pattern
 
 import pycounter
-
+import pprint
 
 Path = Union[AnyStr, bytes, Pattern]
 ISSN = NewType('ISSN', AnyStr)
@@ -63,7 +63,7 @@ def get_journals_and_no_issns_from_wtcox(wtcox_tsv_path: Path,
 
 
 def add_journals_awaiting_fulfillment(journals_awaiting_fulfillment: Dict[ISSN, Title],
-                                      from_wtcox: Dict[ISSN, Title])\
+                                      from_wtcox: Dict[ISSN, Title]) \
         -> Dict[ISSN, Title]:
     """
     Fill in journals missing from report from WTCox.
@@ -86,7 +86,7 @@ def add_journals_awaiting_fulfillment(journals_awaiting_fulfillment: Dict[ISSN, 
 
 
 def get_usage_stats_from_wtcox_journals(journals_from_wtcox: Dict[ISSN, Title],
-                                        path_to_usage_reports: Path)\
+                                        path_to_usage_reports: Path) \
         -> UsageReport:
     """
     Take an issn-indexed dict of titles and a path to Counter 4 reports and make a dict of dicts indexed as below.
@@ -115,14 +115,13 @@ def get_usage_stats_from_wtcox_journals(journals_from_wtcox: Dict[ISSN, Title],
                     for x in journal:
                         usage_reports[journals_from_wtcox[journal.issn]][x[0]] += x[2]
         elif report.report_type == 'TR_J1':
-            if getattr(journal, 'metric', '') == 'Total_Item_Requests':
-                for journal in report:
-                    if getattr(journal, 'issn', '') in journals_from_wtcox:
-                        for x in journal:
-                            usage_reports[journals_from_wtcox[journal.issn]][x[0]] += x[2]
+            for journal in report:
+                if getattr(journal, 'issn', '') in journals_from_wtcox and getattr(journal,'metric',
+                                                                                    '') == 'Total_Item_Requests':
+                    for x in journal:
+                        usage_reports[journals_from_wtcox[journal.issn]][x[0]] += x[2]
         else:
-            print('unknown or unacceptible report type',fn)
-            raise
+            print('unknown or unacceptable report type', fn)
     return usage_reports
 
 
@@ -147,7 +146,7 @@ def fill_in_missing_dates(usage: UsageReport, dates: Iterable[Month]) -> UsageRe
 
 def fill_in_missing_journals(from_wtcox: Dict[ISSN, Title],
                              usage: UsageReport,
-                             dates: Iterable[Month])\
+                             dates: Iterable[Month]) \
         -> (UsageReport, List[AnyStr]):
     """
     Check WTCox list against a usage report and fill in any missing journals with 0 usages for dates given.
@@ -209,7 +208,8 @@ def journals_with_usage_under_threshhold(usage_report: UsageReport, threshold: i
 
 if __name__ == '__main__':
     no_counter = {'American Association for State & Local History', 'American Association of School Administrators',
-                  'American Ceramic Society', 'American Federation of Teachers, AFL-CIO', 'American Library Association',
+                  'American Ceramic Society', 'American Federation of Teachers, AFL-CIO',
+                  'American Library Association',
                   'Artforum International', 'Association for Supervision & Curriculum Development',
                   'Botanical Society of America', 'College Art Association of America', 'Coyne & Blanchard Inc.',
                   'Current History', 'Foreign Policy', 'Harpers Magazine Foundation', 'Harvard Business School',
@@ -220,8 +220,9 @@ if __name__ == '__main__':
                   'North American Society for Sport History', 'Penton Aviation Week Intelligence Network',
                   'Sagamore Publishing LLS', 'Scriptorium Press, Inc.', 'The American Institute for Social Justice',
                   'The Instrumentalist Publishing Company', 'The Society for History Education, Inc.',
-                  'Times Supplement LTD', 'ACTE Publications', 'Against the Grain', 'National Council of Teachers of English (NCTE)',
-                  'American Correctional Association', 'American Geosciences Institute',}
+                  'Times Supplement LTD', 'ACTE Publications', 'Against the Grain',
+                  'National Council of Teachers of English (NCTE)',
+                  'American Correctional Association', 'American Geosciences Institute', }
 
     special_cases = {'Edizioni Minerva Medica', 'Chronicle of Higher Education', 'Philosophy Documentation Center'}
 
