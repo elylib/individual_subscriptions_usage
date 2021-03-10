@@ -106,6 +106,7 @@ def get_usage_stats_from_wtcox_journals(journals_from_wtcox: Dict[ISSN, Title],
     for fn in glob.iglob(path_to_usage_reports):
         try:
             report = pycounter.report.parse(fn)
+            print(fn)
         except (pycounter.exceptions.UnknownReportTypeError, ValueError):
             print(fn)
             raise
@@ -207,22 +208,28 @@ def journals_with_usage_under_threshhold(usage_report: UsageReport, threshold: i
 
 
 if __name__ == '__main__':
-    no_counter = {'American Association for State & Local History', 'American Association of School Administrators',
-                  'American Ceramic Society', 'American Federation of Teachers, AFL-CIO',
-                  'American Library Association',
-                  'Artforum International', 'Association for Supervision & Curriculum Development',
-                  'Botanical Society of America', 'College Art Association of America', 'Coyne & Blanchard Inc.',
-                  'Current History', 'Foreign Policy', 'Harpers Magazine Foundation', 'Harvard Business School',
-                  'Harvard Health Publications', 'Institute for Social & Cultural Communications',
+    no_counter = {'AASA Journal of Scholarship and Practice', 'ACTE Publications', 'Against the Grain',
+                  'American Association for State & Local History', 'American Association of School Administrators',
+                  'American Ceramic Society', 'American Correctional Association', 'American Educator',
+                  'American Federation of Teachers, AFL-CIO', 'American Geosciences Institute',
+                  'American Library Association', 'American Poetry Review', 'Artforum International',
+                  'Association for Supervision & Curriculum Development', 'Booklist (Password)',
+                  'Botanical Society of America', 'CASE Journal, The', 'College Art Association of America',
+                  'Communication Arts', 'Congressional Digest', 'Coyne & Blanchard Inc.', 'Current History',
+                  'Film Quarterly', 'Foreign Policy', 'GA Magazine (Geographical Association)',
+                  'Geography: Journal of the Geographical Association', 'Harpers Magazine Foundation',
+                  'Harpers Magazine', 'Harvard Business School', 'Harvard Health Publications',
+                  'History News Magazine', 'Inc 500', 'Inc Magazine', 'Institute for Social & Cultural Communications',
                   'International Association of Chiefs of Police', 'Mansueto Ventures LLC', 'Media Source Inc',
-                  'National Association of Elementary School Principals', 'National Recreation & Park Association',
-                  'New Republic', 'New York State Society of Certified Public Accountants', 'Newbay Media LLC',
-                  'North American Society for Sport History', 'Penton Aviation Week Intelligence Network',
-                  'Sagamore Publishing LLS', 'Scriptorium Press, Inc.', 'The American Institute for Social Justice',
-                  'The Instrumentalist Publishing Company', 'The Society for History Education, Inc.',
-                  'Times Supplement LTD', 'ACTE Publications', 'Against the Grain',
+                  'National Association of Elementary School Principals',
                   'National Council of Teachers of English (NCTE)',
-                  'American Correctional Association', 'American Geosciences Institute', }
+                  'National Recreation & Park Association', 'New Republic',
+                  'New York State Society of Certified Public Accountants',
+                  'Newbay Media LLC', 'North American Society for Sport History',
+                  'Penton Aviation Week Intelligence Network', 'Police Chief',
+                  'Principal Insights', 'Sagamore Publishing LLS', 'Scriptorium Press, Inc.',
+                  'The American Institute for Social Justice', 'The Instrumentalist Publishing Company',
+                  'The Society for History Education, Inc.', 'Times Supplement LTD', 'TLS Times Literary Supplement'}
 
     special_cases = {'Edizioni Minerva Medica', 'Chronicle of Higher Education', 'Philosophy Documentation Center'}
 
